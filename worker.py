@@ -23,8 +23,8 @@ def process_message(message):
         object_id = data.get("name")
         bucket_name = data.get("bucket", BUCKET_NAME)
         
-        if not object_id or not object_id.endswith(".wav"):
-            logger.info(f"Skipping {object_id}: Not a .wav file.")
+        if not object_id or not object_id.endswith(".mp3"):
+            logger.info(f"Skipping {object_id}: Not a .mp3 file.")
             message.ack()
             return
         
@@ -43,7 +43,7 @@ def process_message(message):
         
         full_text = " ".join([segment.text for segment in segments])
         
-        transcription_path = object_id.replace(".wav", "_transcription.txt")
+        transcription_path = object_id.replace(".mp3", "_transcription.txt")
         output_blob = bucket.blob(transcription_path)
         output_blob.upload_from_string(full_text)
         
