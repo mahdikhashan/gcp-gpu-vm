@@ -3,10 +3,27 @@ provider "google" {
   region  = "asia-southeast1"
 }
 
+resource "google_compute_firewall" "allow_http" {
+  name = "allow-http"
+  network = "default"
+
+  direction = "INGRESS"
+  priority = 1000
+
+  allow {
+    protocol = "tcp"
+    ports = ["80"]
+  }
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["http-server"]
+}
+
 resource "google_compute_instance" "gpu_worker" {
-  name         = "whisper-l4-worker"
-  zone         = "asia-southeast1-a"
-  machine_type = "g2-standard-4"
+  name         = var.gpu_worker_name
+  zone         = var.gpu_worker_zone
+  machine_type = var.gpu_worker_type
+
+  tags = ["http-server"]
 
   boot_disk {
     initialize_params {
@@ -39,6 +56,8 @@ resource "google_compute_instance" "gpu_worker" {
   metadata = {
     install-nvidia-driver = "True"
   }
+
+  metadata_startup_script = file("../startupscript.sh")
 }
 
 output "gpu_instance" {
