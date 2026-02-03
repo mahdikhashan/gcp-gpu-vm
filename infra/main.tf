@@ -1,6 +1,17 @@
 provider "google" {
-  project = "acoustic-alpha-308609"
-  region  = "asia-southeast1"
+  project = var.project_id
+  region  = var.region
+}
+
+resource "google_service_account" "sa" {
+  account_id = "gpu-worker-sa2"
+  display_name = "GPU Worker SA"
+}
+
+resource "google_project_iam_member" "storage_admin_binding" {
+  member  = "serviceAccount:${google_service_account.sa.email}"
+  project = var.project_id
+  role    = "roles/storage.admin"
 }
 
 resource "google_compute_firewall" "allow_http" {
@@ -44,7 +55,7 @@ resource "google_compute_instance" "gpu_worker" {
   }
 
   service_account {
-    email  = "gpu-worker-sa@acoustic-alpha-308609.iam.gserviceaccount.com"
+    email  = google_service_account.sa.email
     scopes = ["cloud-platform"]
   }
 
