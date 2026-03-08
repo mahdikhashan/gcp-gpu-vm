@@ -1,6 +1,6 @@
 variable "project_id" {
   type    = string
-  default = "acoustic-alpha-308609"
+  default = "jku-practical-project"
 }
 
 variable "region" {
