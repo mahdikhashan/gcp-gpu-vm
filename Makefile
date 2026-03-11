@@ -1,15 +1,11 @@
 init:
-	cd infra && \
-	terraform init
+	terraform -chdir=infra init
 
 setup-instance:
-	cd infra && \
-	terraform apply
+	terraform -chdir=infra apply
 
 fmt:
-	cd infra && \
-	terraform fmt
+	terraform -chdir=infra fmt
 
 remove-infra:
-	cd infra && \
-	terraform destroy
+	terraform -chdir=infra destroy
