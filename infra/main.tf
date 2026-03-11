@@ -4,7 +4,7 @@ provider "google" {
 }
 
 resource "google_service_account" "sa" {
-  account_id = "gpu-worker-sa2"
+  account_id   = "gpu-worker-sa2"
   display_name = "GPU Worker SA"
 }
 
@@ -15,15 +15,15 @@ resource "google_project_iam_member" "storage_admin_binding" {
 }
 
 resource "google_compute_firewall" "allow_http" {
-  name = "allow-http"
+  name    = "allow-http"
   network = "default"
 
   direction = "INGRESS"
-  priority = 1000
+  priority  = 1000
 
   allow {
     protocol = "tcp"
-    ports = ["80"]
+    ports    = ["80"]
   }
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["http-server"]
